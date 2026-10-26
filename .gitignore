@@ -10,6 +10,17 @@ __pycache__/
 *$py.class
 *.pyd
 
+# Large ML Weights & Binary Checkpoints
+*.pth
+*.pt
+*.pkl
+*.h5
+*.onnx
+
+# Local Generated Data & Caches
+data/raw/images/
+data/processed/
+
 # Testing & Linting
 .pytest_cache/
 .coverage
