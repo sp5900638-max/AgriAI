@@ -13,6 +13,8 @@ Pages:
 """
 
 import os
+import html
+from pathlib import Path
 import json
 import joblib
 import cv2
@@ -98,11 +100,12 @@ def load_models():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     models["device"] = device
 
-    # CNN Model
+    # CNN Model - Secured with weights_only=True to prevent pickle deserialization RCE (CWE-502)
     cnn_path = "models/cropsense_cnn.pth"
     cnn = CropSenseCNN(num_classes=len(SUPPORTED_CLASSES), pretrained=False)
     if os.path.exists(cnn_path):
-        cnn.load_state_dict(torch.load(cnn_path, map_location=device))
+        state_dict = torch.load(cnn_path, map_location=device, weights_only=True)
+        cnn.load_state_dict(state_dict)
     cnn.to(device)
     cnn.eval()
     models["cnn"] = cnn
@@ -131,8 +134,8 @@ def load_models():
 
 
 # Sidebar Navigation
-st.sidebar.image("https://img.icons8.com/color/96/sprout.png", width=70)
-st.sidebar.title("CropSense AI")
+st.sidebar.markdown("# 🌱")
+st.sidebar.title("AgriAI / CropSense")
 st.sidebar.caption("Data-Driven Crop Health Analytics | SDG 2")
 
 menu = st.sidebar.radio(
@@ -373,25 +376,48 @@ elif menu == "Diagnosis":
     img_bgr = None
     sample_disease = "Healthy"
 
+    MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB Limit
+    ALLOWED_MAGIC_SIGNATURES = [
+        b"\x89PNG\r\n\x1a\n",   # PNG
+        b"\xff\xd8\xff",         # JPEG
+    ]
+
     if input_mode == "Select Sample Benchmark Leaf":
-        sample_dir = "data/raw/images"
-        sample_files = [f for f in os.listdir(sample_dir) if f.endswith(".png")] if os.path.exists(sample_dir) else []
+        sample_dir = Path("data/raw/images").resolve()
+        sample_files = [f.name for f in sample_dir.glob("*.png")] if sample_dir.exists() else []
         if sample_files:
             selected_file = st.selectbox("Select Sample Image", sample_files)
-            img_path = os.path.join(sample_dir, selected_file)
-            img_bgr = cv2.imread(img_path)
-            # Extract expected label from filename if available
-            for c in SUPPORTED_CLASSES:
-                if c in selected_file:
-                    sample_disease = c
-                    break
+            # Path Traversal Hardening (CWE-22)
+            safe_filename = Path(selected_file).name
+            target_path = (sample_dir / safe_filename).resolve()
+
+            # Ensure resolved path is strictly within sample_dir
+            if sample_dir in target_path.parents and target_path.exists():
+                img_bgr = cv2.imread(str(target_path))
+                for c in SUPPORTED_CLASSES:
+                    if c in safe_filename:
+                        sample_disease = c
+                        break
+            else:
+                st.error("Security alert: Attempted traversal or invalid path detected.")
         else:
             st.warning("No sample images found in `data/raw/images`. Please run `python train_all.py` first.")
     else:
-        uploaded_file = st.file_uploader("Upload Leaf Image (PNG/JPG)", type=["png", "jpg", "jpeg"])
+        uploaded_file = st.file_uploader("Upload Leaf Image (PNG/JPG, Max 5MB)", type=["png", "jpg", "jpeg"])
         if uploaded_file is not None:
-            file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-            img_bgr = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+            # File Upload Hardening: Size check (CWE-400)
+            if uploaded_file.size > MAX_FILE_SIZE_BYTES:
+                st.error(f"File exceeds maximum allowable size ({MAX_FILE_SIZE_BYTES // (1024*1024)} MB).")
+            else:
+                raw_bytes = uploaded_file.read()
+                # File Upload Hardening: Magic Bytes signature check (CWE-434)
+                if not any(raw_bytes.startswith(sig) for sig in ALLOWED_MAGIC_SIGNATURES):
+                    st.error("Invalid file header: Binary signature does not match valid PNG or JPEG.")
+                else:
+                    np_buffer = np.frombuffer(raw_bytes, dtype=np.uint8)
+                    img_bgr = cv2.imdecode(np_buffer, cv2.IMREAD_COLOR)
+                    if img_bgr is None:
+                        st.error("Decoder failure: Uploaded image could not be parsed safely.")
 
     if img_bgr is not None:
         # Preprocessing
@@ -537,13 +563,19 @@ elif menu == "Diagnosis":
         st.markdown("### 🏆 Final Diagnosis & Action Protocol")
         res_col1, res_col2 = st.columns([1, 1.5])
         with res_col1:
+            # XSS Hardening: Escape dynamic parameters before rendering in HTML
+            safe_diag = html.escape(str(fusion_result.get('final_diagnosis', 'Unknown')))
+            safe_conf = float(fusion_result.get('confidence', 0.0)) * 100.0
+            safe_mode = html.escape(str(fusion_result.get('fusion_mode', 'N/A')))
+            safe_status = html.escape(str(fusion_result.get('status', 'N/A')))
+
             st.markdown(f"""
             <div class="metric-card">
                 <h4>Diagnosed Condition</h4>
-                <h2 style="color: #2e7d32;">{fusion_result['final_diagnosis']}</h2>
-                <p><b>Fused Confidence:</b> {fusion_result['confidence'] * 100:.1f}%</p>
-                <p><b>Pipeline Mode:</b> {fusion_result['fusion_mode']}</p>
-                <p><b>Status:</b> {fusion_result['status']}</p>
+                <h2 style="color: #2e7d32;">{safe_diag}</h2>
+                <p><b>Fused Confidence:</b> {safe_conf:.1f}%</p>
+                <p><b>Pipeline Mode:</b> {safe_mode}</p>
+                <p><b>Status:</b> {safe_status}</p>
             </div>
             """, unsafe_allow_html=True)
 
