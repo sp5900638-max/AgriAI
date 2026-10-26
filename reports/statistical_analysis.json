@@ -1,0 +1,214 @@
+{
+  "pearson_corr": {
+    "nitrogen": {
+      "nitrogen": 1.0,
+      "phosphorus": -0.005,
+      "potassium": 0.007,
+      "ph": 0.044,
+      "soil_moisture": -0.01,
+      "temperature": -0.028,
+      "humidity": -0.018,
+      "rainfall": 0.046
+    },
+    "phosphorus": {
+      "nitrogen": -0.005,
+      "phosphorus": 1.0,
+      "potassium": -0.009,
+      "ph": -0.042,
+      "soil_moisture": -0.001,
+      "temperature": 0.017,
+      "humidity": -0.028,
+      "rainfall": -0.047
+    },
+    "potassium": {
+      "nitrogen": 0.007,
+      "phosphorus": -0.009,
+      "potassium": 1.0,
+      "ph": -0.043,
+      "soil_moisture": 0.059,
+      "temperature": 0.005,
+      "humidity": -0.036,
+      "rainfall": -0.033
+    },
+    "ph": {
+      "nitrogen": 0.044,
+      "phosphorus": -0.042,
+      "potassium": -0.043,
+      "ph": 1.0,
+      "soil_moisture": 0.064,
+      "temperature": 0.05,
+      "humidity": -0.032,
+      "rainfall": 0.014
+    },
+    "soil_moisture": {
+      "nitrogen": -0.01,
+      "phosphorus": -0.001,
+      "potassium": 0.059,
+      "ph": 0.064,
+      "soil_moisture": 1.0,
+      "temperature": -0.03,
+      "humidity": -0.012,
+      "rainfall": 0.038
+    },
+    "temperature": {
+      "nitrogen": -0.028,
+      "phosphorus": 0.017,
+      "potassium": 0.005,
+      "ph": 0.05,
+      "soil_moisture": -0.03,
+      "temperature": 1.0,
+      "humidity": 0.035,
+      "rainfall": 0.075
+    },
+    "humidity": {
+      "nitrogen": -0.018,
+      "phosphorus": -0.028,
+      "potassium": -0.036,
+      "ph": -0.032,
+      "soil_moisture": -0.012,
+      "temperature": 0.035,
+      "humidity": 1.0,
+      "rainfall": 0.018
+    },
+    "rainfall": {
+      "nitrogen": 0.046,
+      "phosphorus": -0.047,
+      "potassium": -0.033,
+      "ph": 0.014,
+      "soil_moisture": 0.038,
+      "temperature": 0.075,
+      "humidity": 0.018,
+      "rainfall": 1.0
+    }
+  },
+  "spearman_corr": {
+    "nitrogen": {
+      "nitrogen": 1.0,
+      "phosphorus": -0.004,
+      "potassium": 0.008,
+      "ph": 0.044,
+      "soil_moisture": -0.01,
+      "temperature": -0.027,
+      "humidity": -0.017,
+      "rainfall": 0.044
+    },
+    "phosphorus": {
+      "nitrogen": -0.004,
+      "phosphorus": 1.0,
+      "potassium": -0.01,
+      "ph": -0.042,
+      "soil_moisture": -0.001,
+      "temperature": 0.016,
+      "humidity": -0.029,
+      "rainfall": -0.046
+    },
+    "potassium": {
+      "nitrogen": 0.008,
+      "phosphorus": -0.01,
+      "potassium": 1.0,
+      "ph": -0.043,
+      "soil_moisture": 0.061,
+      "temperature": 0.005,
+      "humidity": -0.035,
+      "rainfall": -0.033
+    },
+    "ph": {
+      "nitrogen": 0.044,
+      "phosphorus": -0.042,
+      "potassium": -0.043,
+      "ph": 1.0,
+      "soil_moisture": 0.065,
+      "temperature": 0.05,
+      "humidity": -0.033,
+      "rainfall": 0.016
+    },
+    "soil_moisture": {
+      "nitrogen": -0.01,
+      "phosphorus": -0.001,
+      "potassium": 0.061,
+      "ph": 0.065,
+      "soil_moisture": 1.0,
+      "temperature": -0.03,
+      "humidity": -0.012,
+      "rainfall": 0.037
+    },
+    "temperature": {
+      "nitrogen": -0.027,
+      "phosphorus": 0.016,
+      "potassium": 0.005,
+      "ph": 0.05,
+      "soil_moisture": -0.03,
+      "temperature": 1.0,
+      "humidity": 0.035,
+      "rainfall": 0.074
+    },
+    "humidity": {
+      "nitrogen": -0.017,
+      "phosphorus": -0.029,
+      "potassium": -0.035,
+      "ph": -0.033,
+      "soil_moisture": -0.012,
+      "temperature": 0.035,
+      "humidity": 1.0,
+      "rainfall": 0.018
+    },
+    "rainfall": {
+      "nitrogen": 0.044,
+      "phosphorus": -0.046,
+      "potassium": -0.033,
+      "ph": 0.016,
+      "soil_moisture": 0.037,
+      "temperature": 0.074,
+      "humidity": 0.018,
+      "rainfall": 1.0
+    }
+  },
+  "chi_square": {
+    "chi2_stat": 8.653,
+    "p_value": 0.37239543725674157,
+    "dof": 8,
+    "significant": false
+  },
+  "anova": {
+    "nitrogen": {
+      "f_stat": 132.206,
+      "p_value": 1.3269992432729357e-52,
+      "significant": true
+    },
+    "phosphorus": {
+      "f_stat": 0.921,
+      "p_value": 0.39843540344991085,
+      "significant": false
+    },
+    "potassium": {
+      "f_stat": 116.117,
+      "p_value": 8.1294778988164055e-47,
+      "significant": true
+    },
+    "ph": {
+      "f_stat": 0.815,
+      "p_value": 0.44294912613556114,
+      "significant": false
+    },
+    "soil_moisture": {
+      "f_stat": 5.923,
+      "p_value": 0.0027560833063698283,
+      "significant": true
+    },
+    "temperature": {
+      "f_stat": 2.886,
+      "p_value": 0.05620888583272892,
+      "significant": false
+    },
+    "humidity": {
+      "f_stat": 41.987,
+      "p_value": 2.379934679021695e-18,
+      "significant": true
+    },
+    "rainfall": {
+      "f_stat": 4.89,
+      "p_value": 0.007668737131410834,
+      "significant": true
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "leakage_check": {
+    "passed": true,
+    "train_val_overlap": 0,
+    "train_test_overlap": 0,
+    "val_test_overlap": 0,
+    "train_count": 840,
+    "val_count": 120,
+    "test_count": 240
+  },
+  "rf_metrics": {
+    "accuracy": 0.9208,
+    "precision": 0.9039,
+    "recall": 0.9208,
+    "f1_score": 0.8951,
+    "cv_mean_accuracy": 0.9187,
+    "cv_std": 0.0126,
+    "confusion_matrix": [
+      [
+        2,
+        13,
+        4
+      ],
+      [
+        1,
+        150,
+        0
+      ],
+      [
+        0,
+        1,
+        69
+      ]
+    ]
+  },
+  "xgb_metrics": {
+    "accuracy": 0.9417,
+    "precision": 0.9385,
+    "recall": 0.9417,
+    "f1_score": 0.9314,
+    "confusion_matrix": [
+      [
+        7,
+        8,
+        4
+      ],
+      [
+        1,
+        150,
+        0
+      ],
+      [
+        0,
+        1,
+        69
+      ]
+    ]
+  },
+  "feature_importances": {
+    "potassium": 0.3597,
+    "nitrogen": 0.3585,
+    "humidity": 0.0895,
+    "temperature": 0.0468,
+    "rainfall": 0.0442,
+    "soil_moisture": 0.039,
+    "ph": 0.0326,
+    "phosphorus": 0.0297
+  },
+  "target_classes": [
+    "High",
+    "Low",
+    "Medium"
+  ]
+}
